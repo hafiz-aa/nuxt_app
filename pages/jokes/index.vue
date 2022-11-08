@@ -1,5 +1,6 @@
 <template>
   <div>
+    <SearchJokes v-on:search-text="searchText" />
     <Joke
       v-for="joke in jokes"
       :key="joke.id"
@@ -12,10 +13,12 @@
 <script>
 import axios from 'axios'
 import Joke from '../../.nuxt/components/Joke.vue'
+import SearchJokes from '../../.nuxt/components/Search_Jokes.vue'
 
 export default {
   components: {
     Joke,
+    SearchJokes,
   },
   data() {
     return {
@@ -29,16 +32,34 @@ export default {
       },
     }
     try {
-      const res = await axios.get('https://icanhazdadjoke.com/search', config)
+      const res = await axios.get(`https://icanhazdadjoke.com/search`, config)
 
       this.jokes = res.data.results
     } catch (err) {
       console.log(err)
     }
   },
+  methods: {
+    async searchText(text) {
+      const config = {
+        headers: {
+          Accept: 'application/json',
+        },
+      }
+      try {
+        const res = await axios.get(
+          `https://icanhazdadjoke.com/search?term=${text}`,
+          config
+        )
+        this.jokes = res.data.results
+      } catch (err) {
+        console.log(err)
+      }
+    },
+  },
   head() {
     return {
-      title: 'About the App',
+      title: 'Dad Jokes',
       meta: [
         {
           hid: 'description',
