@@ -28,9 +28,21 @@ export default {
         config
       )
 
-      this.jokes = res.data.results
+      this.joke = res.data.joke
     } catch (err) {
       console.log(err)
+    }
+  },
+  head() {
+    return {
+      title: this.joke,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Best place for corny dad jokes',
+        },
+      ],
     }
   },
 }
